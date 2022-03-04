@@ -38,15 +38,15 @@
                 <td th:text="${product.title}"></td>
                 <td th:text="${product.cost}"></td>
                 <td sec:authorize="hasAuthority('ADMIN')">
-                    <a type="button" th:href="@{/product(id=${product.id})}" class="btn btn-warning">Редактировать</a>
+                    <a type="button" th:href="@{'/product/' + ${product.id}}" class="btn btn-warning">Редактировать</a>
                 </td>
                 <td sec:authorize="hasAuthority('ADMIN')">
-                    <a type="button" th:href="@{/product/delete(id=${product.id})}" class="btn btn-danger">Удалить</a>
+                    <a type="button" th:href="@{'/product/delete/' + ${product.id}}" class="btn btn-danger">Удалить</a>
                 </td>
                 <td sec:authorize="hasAuthority('USER') || isAnonymous()">
                     <a type="button" th:href="@{'/product/' + ${product.id} }" class="btn btn-warning">Просмотреть</a>
                 </td>
-                <td sec:authorize="hasAuthority('USER')">
+                <td>
                     <a type="button" th:href="@{'/cart/add/' + ${product.id}}" class="btn btn-danger">Добавить</a>
                 </td>
             </tr>

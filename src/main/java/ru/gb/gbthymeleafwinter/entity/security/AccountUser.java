@@ -2,6 +2,7 @@ package ru.gb.gbthymeleafwinter.entity.security;
 
 import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.gb.gbthymeleafwinter.entity.Cart;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -24,11 +25,14 @@ public class AccountUser implements UserDetails {
     private String firstname;
     private String lastname;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Cart> cart;
+
     @Singular
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority",
-    joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
-    inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
+            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
+            inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
     private Set<Authority> authorities;
     @Builder.Default
     private boolean accountNonExpired = true;

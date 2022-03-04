@@ -17,6 +17,7 @@ CREATE TABLE PRODUCT
 CREATE TABLE CART
 (
     ID                 BIGSERIAL   NOT NULL PRIMARY KEY,
+    USER_ID            BIGINT      NOT NULL REFERENCES ACCOUNT_USER,
     VERSION            INT         NOT NULL DEFAULT 0,
     CREATED_BY         VARCHAR(255),
     CREATED_DATE       TIMESTAMP,
@@ -30,20 +31,20 @@ CREATE TABLE CART_PRODUCT
     CART_ID    BIGINT NOT NULL REFERENCES CART,
     PRODUCT_ID BIGINT NOT NULL REFERENCES PRODUCT,
 
-    PRIMARY KEY (CART_ID,PRODUCT_ID)
+    PRIMARY KEY (CART_ID, PRODUCT_ID)
 );
 
 CREATE TABLE ACCOUNT_USER
 (
-    ID                    BIGSERIAL    NOT NULL PRIMARY KEY,
-    username              VARCHAR(255) NOT NULL,
-    password              VARCHAR(255) NOT NULL,
-    firstname             VARCHAR(255) NOT NULL,
-    lastname              VARCHAR(255) NOT NULL,
+    ID                      BIGSERIAL    NOT NULL PRIMARY KEY,
+    username                VARCHAR(255) NOT NULL,
+    password                VARCHAR(255) NOT NULL,
+    firstname               VARCHAR(255) NOT NULL,
+    lastname                VARCHAR(255) NOT NULL,
     account_non_expired     BOOLEAN      NOT NULL,
     account_non_locked      BOOLEAN      NOT NULL,
     credentials_non_expired BOOLEAN      NOT NULL,
-    enabled               BOOLEAN      NOT NULL
+    enabled                 BOOLEAN      NOT NULL
 );
 
 CREATE TABLE AUTHORITY
@@ -54,7 +55,7 @@ CREATE TABLE AUTHORITY
 
 CREATE TABLE USER_AUTHORITY
 (
-    USER_ID BIGINT NOT NULL,
+    USER_ID      BIGINT NOT NULL,
     AUTHORITY_ID BIGINT NOT NULL,
 
 
@@ -74,4 +75,5 @@ DROP TABLE PRODUCT;
 SELECT *
 FROM PRODUCT;
 
-select * from account_user;
+select *
+from account_user;

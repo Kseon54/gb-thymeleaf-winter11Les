@@ -19,9 +19,15 @@ public class JpaUserDetailService implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AccountUser accountUser = accountUserDao.findByUsername(username).orElseThrow(
+        return accountUserDao.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("Username: " + username + " not found")
         );
-        return accountUser;
+    }
+
+    @Transactional(readOnly = true)
+    public AccountUser findByName(String username){
+        return accountUserDao.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("Username: " + username + " not found")
+        );
     }
 }

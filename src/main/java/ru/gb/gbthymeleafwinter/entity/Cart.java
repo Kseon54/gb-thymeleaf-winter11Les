@@ -1,20 +1,16 @@
 package ru.gb.gbthymeleafwinter.entity;
 
-
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
 import ru.gb.gbthymeleafwinter.entity.enums.Status;
-
+import ru.gb.gbthymeleafwinter.entity.security.AccountUser;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Setter
@@ -23,20 +19,23 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "product")
+@Table(name = "cart")
 @EntityListeners(AuditingEntityListener.class)
-public class Product {
+public class Cart extends AbstractEntity<Cart> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
-    private BigDecimal cost;
-    @Column(name = "manufacture_date")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date;
 
-    @ManyToMany(mappedBy = "products")
-    private Set<Cart> carts;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private AccountUser user;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "cart_product",
+            joinColumns = {@JoinColumn(name = "cart_id")},
+            inverseJoinColumns = {@JoinColumn(name = "product_id")}
+    )
+    private Set<Product> products;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -50,22 +49,28 @@ public class Product {
     private String createdBy;
     @CreatedDate
     @Column(name = "CREATED_DATE", updatable = false)
-    private LocalDateTime createdDate;
+    private LocalDate createdDate;
     @LastModifiedBy
     @Column(name = "LAST_MODIFIED_BY")
     private String lastModifiedBy;
     @LastModifiedDate
     @Column(name = "LAST_MODIFIED_DATE")
-    private LocalDateTime lastModifiedDate;
-
+    private LocalDate lastModifiedDate;
 
     @Override
     public String toString() {
-        return "Product{" +
+        return "Cart{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
-                ", cost=" + cost +
-                ", date=" + date +
                 '}';
+    }
+
+    @Override
+    public Cart createBuilder() {
+//        Set<Product> products = getProducts().stream().map(Product::createBuilder).collect(Collectors.toSet());
+        return Cart.builder()
+                .id(id)
+//                .products(products)
+                .status(status)
+                .build();
     }
 }
