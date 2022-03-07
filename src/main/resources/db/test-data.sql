@@ -26,6 +26,27 @@ values (1, 2),
        (2, 1);
 
 
+insert into authority (permission)
+values ('cart.create'),
+       ('cart.read'),
+       ('cart.update'),
+       ('cart.delete');
+
+insert into role_authority (authority_id, role_id)
+values (5, 1),
+       (6, 1),
+       (7, 1),
+       (8, 1),
+       (6, 2);
+
+insert into authority (permission)
+values ('cart.add'),
+       ('cart.drop');
+
+insert into role_authority (authority_id, role_id)
+values
+       (9, 2),
+       (10, 2);
 
 -- insert into MANUFACTURER (name) values ('Oxford Industries, Inc.');
 -- insert into MANUFACTURER (name) values ('CHS Inc');

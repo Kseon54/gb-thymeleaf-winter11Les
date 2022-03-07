@@ -7,7 +7,6 @@ import ru.gb.gbthymeleafwinter.dao.CartDao;
 import ru.gb.gbthymeleafwinter.entity.Cart;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -19,19 +18,6 @@ public class CartService extends AbstractService<Cart> {
     public CartService(CartDao cartDao) {
         super(cartDao);
         this.cartDao = cartDao;
-    }
-
-    public Cart save(Cart cart) {
-        if (cart.getId() != null) {
-            Optional<Cart> CartFromDbOptional = cartDao.findById(cart.getId());
-            if (CartFromDbOptional.isPresent()) {
-                Cart cartFromDb = CartFromDbOptional.get();
-                cartFromDb.setStatus(cart.getStatus());
-                cartFromDb.setProducts(cart.getProducts());
-                return cartDao.save(cartFromDb);
-            }
-        }
-        return cartDao.save(cart);
     }
 
     @Override

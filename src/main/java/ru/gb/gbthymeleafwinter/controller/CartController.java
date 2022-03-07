@@ -1,6 +1,7 @@
 package ru.gb.gbthymeleafwinter.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,7 @@ public class CartController {
     private final JpaUserDetailService userDetailService;
 
     @GetMapping()
+    @PreAuthorize("hasAuthority('cart.read')")
     public String getProductList(Model model, Principal principal) {
         Cart cart = getActiveCart(principal);
         model.addAttribute("products", cart.getProducts());
@@ -37,6 +39,7 @@ public class CartController {
 
 //    @PreAuthorize("hasAnyAuthority('USER')")
     @GetMapping("/add/{id}")
+    @PreAuthorize("hasAnyAuthority('cart.add', 'cart.update')")
     public String addProduct(@PathVariable(name = "id") Long productId,
                              Principal principal) {
 
@@ -47,6 +50,7 @@ public class CartController {
     }
 
     @GetMapping("/deleteProduct/{idProduct}")
+    @PreAuthorize("hasAnyAuthority('cart.drop', 'cart.update')")
     public String deleteProductById(@PathVariable(name = "idProduct") Long idProduct,
                                     Principal principal) {
         Cart cart = getActiveCart(principal);
