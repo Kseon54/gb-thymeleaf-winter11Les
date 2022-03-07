@@ -1,11 +1,15 @@
 package ru.gb.gbthymeleafwinter.entity.security;
 
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.gb.gbthymeleafwinter.entity.Cart;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -25,14 +29,18 @@ public class AccountUser implements UserDetails {
     private String firstname;
     private String lastname;
 
+
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Cart> cart;
 
     @Singular
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_authority",
-            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
-            inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
+    @JoinTable(name = "user_role",
+    joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
+    inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")})
+    private Set<AccountRole> roles;
+
+    @Transient
     private Set<Authority> authorities;
     @Builder.Default
     private boolean accountNonExpired = true;
@@ -42,4 +50,18 @@ public class AccountUser implements UserDetails {
     private boolean credentialsNonExpired = true;
     @Builder.Default
     private boolean enabled = true;
+
+    public Set<GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> authorities = this.roles.stream()
+                .map(AccountRole::getAuthorities)
+                .flatMap(Set::stream)
+                .collect(Collectors.toSet());
+        authorities.addAll(mapRolesToAuthorities(this.roles));
+        return authorities;
+
+    }
+
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<AccountRole> roles) {
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
 }

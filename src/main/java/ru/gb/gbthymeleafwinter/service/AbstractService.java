@@ -18,20 +18,24 @@ import java.util.List;
 public abstract class AbstractService<T extends AbstractEntity<T>> {
     private final AbstractDao<T, Long> repository;
 
+    @Transactional(readOnly = true)
     public List<T> findAllActive(int page, int size) {
-        return repository.findByStatus(Status.ACTIVE, PageRequest.of(page, size));
+        return repository.findAllByStatus(Status.ACTIVE, PageRequest.of(page, size));
     }
 
+    @Transactional(readOnly = true)
     public List<T> findAllActive() {
-        return repository.findByStatus(Status.ACTIVE);
+        return repository.findAllByStatus(Status.ACTIVE);
     }
 
+    @Transactional(readOnly = true)
     public List<T> findAllActiveSortedBy(Sort.Direction direction, String column) {
-        return repository.findByStatus(Status.ACTIVE, Sort.by(direction, column));
+        return repository.findAllByStatus(Status.ACTIVE, Sort.by(direction, column));
     }
 
+    @Transactional(readOnly = true)
     public List<T> findAllActiveSortedBy(Sort.Direction direction, String column, int page, int size) {
-        return repository.findByStatus(Status.ACTIVE, PageRequest.of(page, size, Sort.by(direction, column)));
+        return repository.findAllByStatus(Status.ACTIVE, PageRequest.of(page, size, Sort.by(direction, column)));
     }
 
 

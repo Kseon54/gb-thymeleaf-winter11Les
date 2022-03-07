@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.gb.gbthymeleafwinter.dao.CartDao;
-import ru.gb.gbthymeleafwinter.dao.security.AccountUserDao;
 import ru.gb.gbthymeleafwinter.entity.Cart;
-import ru.gb.gbthymeleafwinter.entity.security.AccountUser;
-import ru.gb.gbthymeleafwinter.security.JpaUserDetailService;
 
 import java.util.List;
 import java.util.Optional;

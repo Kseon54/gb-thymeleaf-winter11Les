@@ -15,7 +15,7 @@
 
 <div class="container">
 
-    <span th:if="${products.size() == 0}">Товаров нет</span>
+    <h1 th:if="${products.size() == 0}">Товаров нет</h1>
 
     <div th:unless="${products.size() == 0}">
         <table class="table">
@@ -24,10 +24,12 @@
                 <th scope="col">#</th>
                 <th scope="col">Наименование</th>
                 <th scope="col">Цена</th>
-                <th scope="col" sec:authorize="hasAuthority('ADMIN')">Редактировать</th>
-                <th scope="col" sec:authorize="hasAuthority('ADMIN')">Удалить</th>
-                <th scope="col" sec:authorize="hasAuthority('USER') || isAnonymous()">Просмотр</th>
-                <th scope="col" sec:authorize="hasAuthority('USER')">Корзина</th>
+                <th scope="col" sec:authorize="hasAuthority('product.update')">Редактировать</th>
+                <th scope="col" sec:authorize="hasAuthority('product.delete')">Удалить</th>
+                <th scope="col" sec:authorize="hasAuthority('product.read') || isAnonymous()">Просмотр</th>
+                <!--              todo  дз - добавить permission и реализовать-->
+                <!--                <th scope="col" sec:authorize="hasAuthority('cart.add')">Корзина</th>-->
+                <th scope="col" sec:authorize="hasAuthority('product.read')">Корзина</th>
             </tr>
             </thead>
             <tbody>
@@ -37,16 +39,17 @@
                 <th scope="row" th:text="${i.count}"></th>
                 <td th:text="${product.title}"></td>
                 <td th:text="${product.cost}"></td>
-                <td sec:authorize="hasAuthority('ADMIN')">
-                    <a type="button" th:href="@{'/product/' + ${product.id}}" class="btn btn-warning">Редактировать</a>
+                <td sec:authorize="hasAuthority('product.update')">
+                    <a type="button" th:href="@{/product(id=${product.id})}" class="btn btn-warning">Редактировать</a>
                 </td>
-                <td sec:authorize="hasAuthority('ADMIN')">
-                    <a type="button" th:href="@{'/product/delete/' + ${product.id}}" class="btn btn-danger">Удалить</a>
+                <td sec:authorize="hasAuthority('product.delete')">
+                    <a type="button" th:href="@{/product/delete(id=${product.id})}" class="btn btn-danger">Удалить</a>
                 </td>
-                <td sec:authorize="hasAuthority('USER') || isAnonymous()">
+                <td sec:authorize="hasAuthority('product.read') || isAnonymous()">
                     <a type="button" th:href="@{'/product/' + ${product.id} }" class="btn btn-warning">Просмотреть</a>
                 </td>
-                <td>
+                <!--                todo  дз - добавить permission и реализовать-->
+                <td sec:authorize="hasAuthority('product.read')">
                     <a type="button" th:href="@{'/cart/add/' + ${product.id}}" class="btn btn-danger">Добавить</a>
                 </td>
             </tr>

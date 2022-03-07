@@ -10,11 +10,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.gb.gbthymeleafwinter.entity.enums.Status;
 
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Setter
@@ -25,7 +23,7 @@ import java.util.Set;
 @Entity
 @Table(name = "product")
 @EntityListeners(AuditingEntityListener.class)
-public class Product {
+public class Product extends AbstractEntity<Product>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -50,22 +48,22 @@ public class Product {
     private String createdBy;
     @CreatedDate
     @Column(name = "CREATED_DATE", updatable = false)
-    private LocalDateTime createdDate;
+    private LocalDate createdDate;
     @LastModifiedBy
     @Column(name = "LAST_MODIFIED_BY")
     private String lastModifiedBy;
     @LastModifiedDate
     @Column(name = "LAST_MODIFIED_DATE")
-    private LocalDateTime lastModifiedDate;
-
+    private LocalDate lastModifiedDate;
 
     @Override
-    public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", cost=" + cost +
-                ", date=" + date +
-                '}';
+    public Product createBuilder() {
+        return Product.builder()
+                .id(id)
+                .title(title)
+                .cost(cost)
+                .date(date)
+                .status(status)
+                .build();
     }
 }

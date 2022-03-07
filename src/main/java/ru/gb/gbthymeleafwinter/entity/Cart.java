@@ -12,6 +12,7 @@ import ru.gb.gbthymeleafwinter.entity.security.AccountUser;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -66,10 +67,10 @@ public class Cart extends AbstractEntity<Cart> {
 
     @Override
     public Cart createBuilder() {
-//        Set<Product> products = getProducts().stream().map(Product::createBuilder).collect(Collectors.toSet());
+        Set<Product> products = getProducts().stream().map(Product::createBuilder).collect(Collectors.toSet());
         return Cart.builder()
                 .id(id)
-//                .products(products)
+                .products(products)
                 .status(status)
                 .build();
     }

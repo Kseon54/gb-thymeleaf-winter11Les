@@ -12,9 +12,9 @@ import java.util.List;
 @NoRepositoryBean
 public interface AbstractDao<T extends AbstractEntity<T>,ID> extends JpaRepository<T, ID> {
 
-    List<T> findByStatus(Status status, PageRequest pageRequest);
+    List<T> findAllByStatus(Status status, PageRequest pageRequest);
 
-    List<T> findByStatus(Status status);
+    List<T> findAllByStatus(Status status);
 
-    List<T> findByStatus(Status active, Sort by);
+    List<T> findAllByStatus(Status active, Sort by);
 }
