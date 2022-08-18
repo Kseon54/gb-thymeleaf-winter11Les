@@ -1,10 +1,10 @@
 spring:
   datasource:
     url: "jdbc:postgresql://localhost:5432/gb_shop"
-    username: "geek"
-    password: "geek"
+    username: "postgres"
+    password: "postgres"
 #  security:
 #    user:
-#      name: 'geek'
-#      password: 'geek'
+#      name: 'postgres'
+#      password: 'postgres'
 
